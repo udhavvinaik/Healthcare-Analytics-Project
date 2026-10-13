@@ -1,0 +1,1010 @@
+{
+  "datasets": [
+    {
+      "name": "1173bdb1",
+      "displayName": "Total Claim Cost",
+      "queryLines": [
+        "SELECT\n",
+        "ROUND(SUM(TotalClaimCost),2) AS Total_Claim_Cost\n",
+        "FROM healthcare.gold.fact_claims_cost;"
+      ],
+      "catalog": "healthcare",
+      "schema": "gold"
+    },
+    {
+      "name": "3baf667b",
+      "displayName": "Total Claims",
+      "queryLines": [
+        "SELECT\r\n",
+        "COUNT(DISTINCT claimid) AS Total_Claims\r\n",
+        "FROM healthcare.gold.fact_claims_cost;"
+      ],
+      "catalog": "healthcare",
+      "schema": "gold"
+    },
+    {
+      "name": "f9236cc2",
+      "displayName": "Average Claim Cost",
+      "queryLines": [
+        "SELECT\r\n",
+        "ROUND(AVG(totalclaimcost),2) AS Avg_Claim_Cost\r\n",
+        "FROM healthcare.gold.fact_claims_cost;"
+      ],
+      "catalog": "healthcare",
+      "schema": "gold"
+    },
+    {
+      "name": "08e686b5",
+      "displayName": "Total Reimbursement",
+      "queryLines": [
+        "SELECT\r\n",
+        "ROUND(SUM(ReimbursementAmount),2) AS Total_Reimbursement\r\n",
+        "FROM healthcare.gold.fact_claims_cost;"
+      ],
+      "catalog": "healthcare",
+      "schema": "gold"
+    },
+    {
+      "name": "242b2e5c",
+      "displayName": "Claims by Type",
+      "queryLines": [
+        "SELECT\r\n",
+        "ClaimType,\r\n",
+        "COUNT(*) AS Total_Claims,\r\n",
+        "SUM(TotalClaimCost) AS Total_Cost\r\n",
+        "FROM healthcare.gold.fact_claims_cost\r\n",
+        "GROUP BY ClaimType;"
+      ],
+      "catalog": "healthcare",
+      "schema": "gold"
+    },
+    {
+      "name": "7b47d7d3",
+      "displayName": "Monthly Claim Cost Trend",
+      "queryLines": [
+        "SELECT\r\n",
+        "ClaimYearMonth,\r\n",
+        "SUM(TotalClaimCost) AS Total_Cost\r\n",
+        "FROM healthcare.gold.fact_claims_cost\r\n",
+        "GROUP BY ClaimYearMonth\r\n",
+        "ORDER BY ClaimYearMonth;"
+      ],
+      "catalog": "healthcare",
+      "schema": "gold"
+    },
+    {
+      "name": "86e1866e",
+      "displayName": "Monthly Claim Volume",
+      "queryLines": [
+        "SELECT\r\n",
+        "ClaimYearMonth,\r\n",
+        "COUNT(*) AS Claim_Count\r\n",
+        "FROM healthcare.gold.fact_claims_cost\r\n",
+        "GROUP BY ClaimYearMonth\r\n",
+        "ORDER BY ClaimYearMonth;"
+      ],
+      "catalog": "healthcare",
+      "schema": "gold"
+    },
+    {
+      "name": "a3f01284",
+      "displayName": "Cost by State",
+      "queryLines": [
+        "SELECT\r\n",
+        "State,\r\n",
+        "SUM(TotalClaimCost) AS Total_Cost\r\n",
+        "FROM healthcare.gold.fact_claims_cost\r\n",
+        "GROUP BY State\r\n",
+        "ORDER BY Total_Cost DESC;"
+      ],
+      "catalog": "healthcare",
+      "schema": "gold"
+    },
+    {
+      "name": "855923f6",
+      "displayName": "Top 10 Providers by Cost",
+      "queryLines": [
+        "SELECT\r\n",
+        "ProviderID,\r\n",
+        "SUM(TotalClaimCost) AS Total_Cost\r\n",
+        "FROM healthcare.gold.fact_claims_cost\r\n",
+        "GROUP BY ProviderID\r\n",
+        "ORDER BY Total_Cost DESC\r\n",
+        "LIMIT 10;"
+      ],
+      "catalog": "healthcare",
+      "schema": "gold"
+    },
+    {
+      "name": "5195091e",
+      "displayName": "Top Providers by Claim Count",
+      "queryLines": [
+        "SELECT\r\n",
+        "ProviderID,\r\n",
+        "COUNT(*) AS Total_Claims\r\n",
+        "FROM healthcare.gold.fact_claims_cost\r\n",
+        "GROUP BY ProviderID\r\n",
+        "ORDER BY Total_Claims DESC\r\n",
+        "LIMIT 10;"
+      ],
+      "catalog": "healthcare",
+      "schema": "gold"
+    },
+    {
+      "name": "c2165d4e",
+      "displayName": "Cost by Age Group",
+      "queryLines": [
+        "SELECT\r\n",
+        "AgeGroup,\r\n",
+        "SUM(TotalClaimCost) AS Total_Cost,\r\n",
+        "COUNT(*) AS Total_Claims\r\n",
+        "FROM healthcare.gold.fact_claims_cost\r\n",
+        "GROUP BY AgeGroup\r\n",
+        "ORDER BY AgeGroup;"
+      ],
+      "catalog": "healthcare",
+      "schema": "gold"
+    },
+    {
+      "name": "5b72df89",
+      "displayName": "Average Cost by Age Group",
+      "queryLines": [
+        "SELECT\r\n",
+        "AgeGroup,\r\n",
+        "ROUND(AVG(TotalClaimCost),2) AS Avg_Cost\r\n",
+        "FROM healthcare.gold.fact_claims_cost\r\n",
+        "GROUP BY AgeGroup\r\n",
+        "ORDER BY AgeGroup;"
+      ],
+      "catalog": "healthcare",
+      "schema": "gold"
+    },
+    {
+      "name": "286d8f10",
+      "displayName": "Fraud vs Non-Fraud Cost",
+      "queryLines": [
+        "SELECT\r\n",
+        "    PotentialFraud,\r\n",
+        "    ClaimType,\r\n",
+        "    SUM(TotalClaimCost) AS Total_Cost\r\n",
+        "FROM healthcare.gold.fact_claims_cost\r\n",
+        "GROUP BY PotentialFraud, ClaimType;"
+      ],
+      "catalog": "healthcare",
+      "schema": "gold"
+    },
+    {
+      "name": "66e47b62",
+      "displayName": "Claims by Quarter",
+      "queryLines": [
+        "SELECT\r\n",
+        "    ClaimYear,\r\n",
+        "    ClaimQuarter,\r\n",
+        "    SUM(TotalClaimCost) AS Total_Cost\r\n",
+        "FROM healthcare.gold.fact_claims_cost\r\n",
+        "GROUP BY ClaimYear, ClaimQuarter\r\n",
+        "ORDER BY ClaimYear, ClaimQuarter;"
+      ],
+      "catalog": "healthcare",
+      "schema": "gold"
+    }
+  ],
+  "pages": [
+    {
+      "name": "f5a5af9e",
+      "displayName": "ClaimsCost",
+      "layout": [
+        {
+          "widget": {
+            "name": "total-claims-cost",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3baf667b",
+                  "fields": [
+                    {
+                      "name": "Total_Claims",
+                      "expression": "`Total_Claims`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "## <span style=\"text-align:center;display:block\">Total Claims</span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "Total_Claims"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "total-claims-cost-1",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1173bdb1",
+                  "fields": [
+                    {
+                      "name": "Total_Claim_Cost",
+                      "expression": "`Total_Claim_Cost`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "## <span style=\"text-align:center;display:block;\">Total Claims Cost</span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "Total_Claim_Cost"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "avg-claims-cost",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "f9236cc2",
+                  "fields": [
+                    {
+                      "name": "Avg_Claim_Cost",
+                      "expression": "`Avg_Claim_Cost`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "## <span style=\"text-align:center;display:block;\">Avg Claims Cost</span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "Avg_Claim_Cost"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "total-reimbursement",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "08e686b5",
+                  "fields": [
+                    {
+                      "name": "Total_Reimbursement",
+                      "expression": "`Total_Reimbursement`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "## <span style=\"text-align:center;display:block;\">Total Reimbursement</span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "Total_Reimbursement"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "claims-by-type",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "242b2e5c",
+                  "fields": [
+                    {
+                      "name": "sum(Total_Cost)",
+                      "expression": "SUM(`Total_Cost`)"
+                    },
+                    {
+                      "name": "ClaimType",
+                      "expression": "`ClaimType`"
+                    },
+                    {
+                      "name": "Total_Claims",
+                      "expression": "`Total_Claims`"
+                    },
+                    {
+                      "name": "Total_Cost",
+                      "expression": "`Total_Cost`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "## <span style=\"text-align:center;display:block;\">Claims by Type</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "sum(Total_Cost)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "ClaimType",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                },
+                "extra": [
+                  {
+                    "fieldName": "Total_Claims"
+                  },
+                  {
+                    "fieldName": "Total_Cost"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "monthly-claim-cost-trend",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "7b47d7d3",
+                  "fields": [
+                    {
+                      "name": "ClaimYearMonth",
+                      "expression": "`ClaimYearMonth`"
+                    },
+                    {
+                      "name": "sum(Total_Cost)",
+                      "expression": "SUM(`Total_Cost`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "## <span style=\"text-align:center;display:block;\">Monthly Claim Cost Trend</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "ClaimYearMonth",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(Total_Cost)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "monthly-claim-volume",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "86e1866e",
+                  "fields": [
+                    {
+                      "name": "ClaimYearMonth",
+                      "expression": "`ClaimYearMonth`"
+                    },
+                    {
+                      "name": "sum(Claim_Count)",
+                      "expression": "SUM(`Claim_Count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "## <span style=\"text-align:center;display:block;\">Monthly Claim Volume</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "ClaimYearMonth",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(Claim_Count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "cost-by-state",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a3f01284",
+                  "fields": [
+                    {
+                      "name": "State",
+                      "expression": "`State`"
+                    },
+                    {
+                      "name": "sum(Total_Cost)",
+                      "expression": "SUM(`Total_Cost`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "## <span style=\"text-align:center;display:block;\">Cost by State</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "State",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(Total_Cost)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 8,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "top-10-providers-cost",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "855923f6",
+                  "fields": [
+                    {
+                      "name": "sum(Total_Cost)",
+                      "expression": "SUM(`Total_Cost`)"
+                    },
+                    {
+                      "name": "ProviderID",
+                      "expression": "`ProviderID`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "## <span style=\"text-align:center;display:block;\">Top 10 Providers by Cost</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(Total_Cost)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "ProviderID",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 14,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "cost-by-age-group",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c2165d4e",
+                  "fields": [
+                    {
+                      "name": "AgeGroup",
+                      "expression": "`AgeGroup`"
+                    },
+                    {
+                      "name": "sum(Total_Cost)",
+                      "expression": "SUM(`Total_Cost`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "## <span style=\"text-align:center;display:block;\">Cost by Age Group</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "AgeGroup",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(Total_Cost)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 20,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "top-10-providers-claim-count",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "5195091e",
+                  "fields": [
+                    {
+                      "name": "ProviderID",
+                      "expression": "`ProviderID`"
+                    },
+                    {
+                      "name": "sum(Total_Claims)",
+                      "expression": "SUM(`Total_Claims`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "## <span style=\"text-align:center;display:block;\">Top 10 Providers by Claim Count</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "ProviderID",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(Total_Claims)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 14,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "avg-cost-by-age-group",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "5b72df89",
+                  "fields": [
+                    {
+                      "name": "AgeGroup",
+                      "expression": "`AgeGroup`"
+                    },
+                    {
+                      "name": "sum(Avg_Cost)",
+                      "expression": "SUM(`Avg_Cost`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "## <span style=\"text-align:center;display:block;\">Average Cost by Age Group</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "AgeGroup",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(Avg_Cost)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 20,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "fraud-vs-non-fraud-cost",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "286d8f10",
+                  "fields": [
+                    {
+                      "name": "ClaimType",
+                      "expression": "`ClaimType`"
+                    },
+                    {
+                      "name": "PotentialFraud",
+                      "expression": "`PotentialFraud`"
+                    },
+                    {
+                      "name": "sum(Total_Cost)",
+                      "expression": "SUM(`Total_Cost`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "## <span style=\"text-align:center;display:block;\">Fraud vs Non-Fraud Cost</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "PotentialFraud",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(Total_Cost)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "ClaimType",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 26,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "claims-by-quarter",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "66e47b62",
+                  "fields": [
+                    {
+                      "name": "ClaimYear",
+                      "expression": "`ClaimYear`"
+                    },
+                    {
+                      "name": "sum(Total_Cost)",
+                      "expression": "SUM(`Total_Cost`)"
+                    },
+                    {
+                      "name": "ClaimQuarter",
+                      "expression": "`ClaimQuarter`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "## <span style=\"text-align:center;display:block;\">Claims by Quarter</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(Total_Cost)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "ClaimQuarter",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "color": {
+                  "fieldName": "ClaimYear",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 26,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
