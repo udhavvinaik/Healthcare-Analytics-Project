@@ -1,0 +1,151 @@
+resources:
+  jobs:
+    Healthcare_capston_orchestration:
+      name: Healthcare-capston-orchestration
+      tasks:
+        - task_key: Bronze_autoLoader
+          notebook_task:
+            notebook_path: /Workspace/Shared/healthcare_project/Bronze/Auto-Loader
+            source: WORKSPACE
+
+        - task_key: beneficiary_silver
+          depends_on:
+            - task_key: Bronze_autoLoader
+          notebook_task:
+            notebook_path: /Workspace/Shared/healthcare_project/Silver/beneficiary_silver
+            source: WORKSPACE
+
+        - task_key: fraudlabels_silver
+          depends_on:
+            - task_key: Bronze_autoLoader
+          notebook_task:
+            notebook_path: /Workspace/Shared/healthcare_project/Silver/fraudlabels_silver
+            source: WORKSPACE
+
+        - task_key: inpatient_silver
+          depends_on:
+            - task_key: Bronze_autoLoader
+          notebook_task:
+            notebook_path: /Workspace/Shared/healthcare_project/Silver/inpatient_silver
+            source: WORKSPACE
+
+        - task_key: outpatient_silver
+          depends_on:
+            - task_key: Bronze_autoLoader
+          notebook_task:
+            notebook_path: /Workspace/Shared/healthcare_project/Silver/outpatient_silver
+            source: WORKSPACE
+
+        - task_key: claims_silver
+          depends_on:
+            - task_key: inpatient_silver
+            - task_key: outpatient_silver
+          notebook_task:
+            notebook_path: /Workspace/Shared/healthcare_project/Silver/claims_silver
+            source: WORKSPACE
+
+        - task_key: claim_enriched_silver
+          depends_on:
+            - task_key: claims_silver
+            - task_key: beneficiary_silver
+            - task_key: fraudlabels_silver
+          notebook_task:
+            notebook_path: /Workspace/Shared/healthcare_project/Silver/claim_enriched_silver
+            source: WORKSPACE
+
+        - task_key: Chronic_Condition_Prevalence
+          depends_on:
+            - task_key: claim_enriched_silver
+          notebook_task:
+            notebook_path: /Workspace/Shared/healthcare_project/Gold/Chronic Condition Prevalence
+            source: WORKSPACE
+
+        - task_key: Claims_Cost_Fact
+          depends_on:
+            - task_key: claim_enriched_silver
+          notebook_task:
+            notebook_path: /Workspace/Shared/healthcare_project/Gold/Claims_Cost_Fact
+            source: WORKSPACE
+
+        - task_key: Fraud_flag_summary
+          depends_on:
+            - task_key: claim_enriched_silver
+          notebook_task:
+            notebook_path: /Workspace/Shared/healthcare_project/Gold/Fraud_flag_summary
+            source: WORKSPACE
+
+        - task_key: Patient_360
+          depends_on:
+            - task_key: claim_enriched_silver
+          notebook_task:
+            notebook_path: /Workspace/Shared/healthcare_project/Gold/Patient_360
+            source: WORKSPACE
+
+        - task_key: Provider_Risk_Scorecard
+          depends_on:
+            - task_key: claim_enriched_silver
+          notebook_task:
+            notebook_path: /Workspace/Shared/healthcare_project/Gold/Provider_Risk_Scorecard
+            source: WORKSPACE
+
+        - task_key: final_test_suite
+          depends_on:
+            - task_key: Provider_Risk_Scorecard
+            - task_key: Claims_Cost_Fact
+            - task_key: Chronic_Condition_Prevalence
+            - task_key: Fraud_flag_summary
+            - task_key: Patient_360
+          notebook_task:
+            notebook_path: /Workspace/Shared/healthcare_project/healthcare_gold_layer_test_suite
+            source: WORKSPACE
+
+        - task_key: testing_via_id
+          depends_on:
+            - task_key: final_test_suite
+          notebook_task:
+            notebook_path: /Workspace/Shared/healthcare_project/gold_layer_validation_by_id
+            source: WORKSPACE
+
+        - task_key: Chronic_condition_anslysis_dashboard
+          depends_on:
+            - task_key: testing_via_id
+          dashboard_task:
+            subscription:
+              attachment:
+                page_attachment: {}
+            warehouse_id: 0b5c274dfbe038a4
+            dashboard_id: 01f1c3a702211a9fa1277c76b5bf93a3
+
+        - task_key: Claims_cost_Dashboard
+          depends_on:
+            - task_key: testing_via_id
+          dashboard_task:
+            subscription:
+              attachment:
+                page_attachment: {}
+            warehouse_id: 0b5c274dfbe038a4
+            dashboard_id: 01f1c39f87b7197e86c0e4e8cb80e277
+
+        - task_key: Compilance_and_Fraud_dashboard
+          depends_on:
+            - task_key: testing_via_id
+          dashboard_task:
+            subscription:
+              attachment:
+                page_attachment: {}
+            warehouse_id: 0b5c274dfbe038a4
+            dashboard_id: 01f1c3a7504e18059729697539e3c703
+
+        - task_key: Provider_Performance_Dashboard
+          depends_on:
+            - task_key: testing_via_id
+          dashboard_task:
+            subscription:
+              attachment:
+                page_attachment: {}
+            warehouse_id: 0b5c274dfbe038a4
+            dashboard_id: 01f1c3a4f9bc1e8190de3c0c5984af80
+
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
